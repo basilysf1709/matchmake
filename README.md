@@ -4,8 +4,12 @@
 
 Matchmake is an ongoing project aimed at implementing a player matchmaking system using an AVL tree for efficient player ranking and matching. This project is currently in development and demonstrates the use of advanced data structures in Zig.
 
-## Sample Illustration
+## Image Illustration (idea)
 <img width="1195" alt="Screenshot 1446-02-22 at 4 59 28 PM" src="https://github.com/user-attachments/assets/bc4abc49-e9eb-4f7b-98bc-f8a070acc091">
+
+## Video Illustration
+
+https://github.com/user-attachments/assets/d07a377d-f270-47af-b949-6fd739252d27
 
 
 ## Project Structure
