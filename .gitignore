@@ -1,6 +1,6 @@
 # Zig build artifacts
-zig-cache/
-zig-out/
+.zig-cache/
+.zig-out/
 
 # Executables
 matchmake
@@ -26,3 +26,5 @@ deps/
 
 # Temporary files
 *.tmp
+
+players.json

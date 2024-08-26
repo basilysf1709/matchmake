@@ -24,9 +24,9 @@ pub const Node = struct {
 
 pub const AVLLeaderboard = struct {
     root: ?*Node,
-    allocator: *Allocator,
+    allocator: std.mem.Allocator,
 
-    pub fn init(allocator: *Allocator) AVLLeaderboard {
+    pub fn init(allocator: std.mem.Allocator) AVLLeaderboard {
         return .{
             .root = null,
             .allocator = allocator,
@@ -122,7 +122,7 @@ pub const AVLLeaderboard = struct {
         return try self.balanceNode(current);
     }
 
-    fn minValueNode(self: *AVLLeaderboard, node: *Node) *Node {
+    fn minValueNode(node: *Node) *Node {
         var current = node;
         while (current.left != null) {
             current = current.left.?;
@@ -168,8 +168,10 @@ pub const AVLLeaderboard = struct {
 
     fn getTopPlayersRecursive(self: *AVLLeaderboard, node: ?*Node, result: *[]Player, count: *usize, n: usize) !void {
         if (node) |current| {
+            // First, traverse the right subtree
             try self.getTopPlayersRecursive(current.right, result, count, n);
 
+            // Then, process the current node
             if (count.* < n) {
                 result.*[count.*] = current.player;
                 count.* += 1;
@@ -177,6 +179,7 @@ pub const AVLLeaderboard = struct {
                 return;
             }
 
+            // Finally, traverse the left subtree
             try self.getTopPlayersRecursive(current.left, result, count, n);
         }
     }
@@ -192,14 +195,14 @@ pub const AVLLeaderboard = struct {
             if (score > current.player.score) {
                 rank.* += 1;
                 if (current.left) |left| {
-                    rank.* += @intCast(usize, left.height);
+                    rank.* += @intCast(left.height);
                 }
                 try self.getRankRecursive(current.right, score, rank);
             } else if (score < current.player.score) {
                 try self.getRankRecursive(current.left, score, rank);
             } else {
                 if (current.left) |left| {
-                    rank.* += @intCast(usize, left.height);
+                    rank.* += @intCast(left.height);
                 }
             }
         }
@@ -259,7 +262,8 @@ pub const AVLLeaderboard = struct {
         node.height = @max(left_height, right_height) + 1;
     }
 
-    fn rotateRight(node: *Node) !*Node {
+    fn rotateRight(self: *AVLLeaderboard, node: *Node) !*Node {
+        _ = self; // Explicitly ignore the self parameter
         var new_root = node.left orelse return node;
         node.left = new_root.right;
         new_root.right = node;
@@ -270,7 +274,8 @@ pub const AVLLeaderboard = struct {
         return new_root;
     }
 
-    fn rotateLeft(node: *Node) !*Node {
+    fn rotateLeft(self: *AVLLeaderboard, node: *Node) !*Node {
+        _ = self; // Explicitly ignore the self parameter
         var new_root = node.right orelse return node;
         node.right = new_root.left;
         new_root.left = node;
