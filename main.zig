@@ -83,4 +83,19 @@ pub fn main() !void {
     for (top_players, 0..) |player, idx| {
         try stdout.print("{d}. {s}: {d}\n", .{ idx + 1, player.name, player.score });
     }
+
+    // New functionality: Get closest players to input score
+    try stdout.print("\nEnter a score to find the 10 closest players: ", .{});
+    const input = try std.io.getStdIn().reader().readUntilDelimiterAlloc(allocator, '\n', 1024);
+    defer allocator.free(input);
+
+    const input_score = try std.fmt.parseInt(u32, input, 10);
+    const closest_players = try leaderboard.getClosestPlayers(input_score);
+    defer allocator.free(closest_players);
+
+    try stdout.print("\n10 Closest Players to score {d}:\n", .{input_score});
+    for (closest_players, 0..) |player, idx| {
+        const score_diff = if (player.score > input_score) player.score - input_score else input_score - player.score;
+        try stdout.print("{d}. {s}: {d} (diff: {d})\n", .{ idx + 1, player.name, player.score, score_diff });
+    }
 }
