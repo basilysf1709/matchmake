@@ -1,0 +1,28 @@
+# Zig build artifacts
+zig-cache/
+zig-out/
+
+# Executables
+matchmake
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Dependency directories
+deps/
+
+# Log files
+*.log
+
+# Any local configuration files
+*.local
+
+# Temporary files
+*.tmp
