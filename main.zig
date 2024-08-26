@@ -17,6 +17,9 @@ pub fn main() !void {
     // Get a writer for standard output
     const stdout = std.io.getStdOut().writer();
 
+    // Start timer for AVL insertion
+    const avl_start = std.time.nanoTimestamp();
+
     // Generate 1,000,000 players
     var i: usize = 0;
     while (i < 100000) : (i += 1) {
@@ -40,6 +43,9 @@ pub fn main() !void {
             try stdout.print("Generated {d} players\n", .{i});
         }
     }
+
+    // End timer for AVL insertion
+    const avl_end = std.time.nanoTimestamp();
 
     try stdout.print("All players generated. Writing to file...\n", .{});
 
@@ -75,6 +81,9 @@ pub fn main() !void {
     // Print completion message
     try stdout.print("Created players.json with {d} players.\n", .{players.count()});
 
+    // Start timer for top 10 players retrieval
+    const top_start = std.time.nanoTimestamp();
+
     // Retrieve and print top 10 players
     try stdout.print("\nTop 10 Players:\n", .{});
     const top_players = try leaderboard.getTopPlayers(10);
@@ -84,12 +93,19 @@ pub fn main() !void {
         try stdout.print("{d}. {s}: {d}\n", .{ idx + 1, player.name, player.score });
     }
 
+    // End timer for top 10 players retrieval
+    const top_end = std.time.nanoTimestamp();
+
     // New functionality: Get closest players to input score
     try stdout.print("\nEnter a score to find the 10 closest players: ", .{});
     const input = try std.io.getStdIn().reader().readUntilDelimiterAlloc(allocator, '\n', 1024);
     defer allocator.free(input);
 
     const input_score = try std.fmt.parseInt(u32, input, 10);
+
+    // Start timer for closest players retrieval
+    const closest_start = std.time.nanoTimestamp();
+
     const closest_players = try leaderboard.getClosestPlayers(input_score);
     defer allocator.free(closest_players);
 
@@ -98,4 +114,13 @@ pub fn main() !void {
         const score_diff = if (player.score > input_score) player.score - input_score else input_score - player.score;
         try stdout.print("{d}. {s}: {d} (diff: {d})\n", .{ idx + 1, player.name, player.score, score_diff });
     }
+
+    // End timer for closest players retrieval
+    const closest_end = std.time.nanoTimestamp();
+
+    // Print timing information
+    try stdout.print("\nTiming Information:\n", .{});
+    try stdout.print("AVL Tree Insertion: {} ns\n", .{avl_end - avl_start});
+    try stdout.print("Top 10 Players Retrieval: {} ns\n", .{top_end - top_start});
+    try stdout.print("10 Closest Players Retrieval: {} ns\n", .{closest_end - closest_start});
 }
