@@ -6,6 +6,7 @@ Matchmake is an ongoing project aimed at implementing a player matchmaking syste
 
 ## Image Illustration (idea)
 <img width="1195" alt="Screenshot 1446-02-22 at 4 59 28 PM" src="https://github.com/user-attachments/assets/bc4abc49-e9eb-4f7b-98bc-f8a070acc091">
+PS: "24" is incorrect
 
 ## Video Illustration
 
